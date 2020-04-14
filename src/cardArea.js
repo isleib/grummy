@@ -1,0 +1,137 @@
+import React, { useEffect, useState } from "react";
+import firebase from "./firebase";
+import { Card, Deck } from "./cards";
+
+const deck = new Deck();
+deck.shuffle();
+
+const CardArea = props => {
+  let [gameId, setGameId] = useState("0");
+  let [gameData, setGameData] = useState({});
+  let [turnCount, setTurnCount] = useState(0);
+  let [currentTurn, setCurrentTurn] = useState(0);
+
+  let [hand, setHand] = useState([]);
+  let [selected, setSelected] = useState([]);
+  let [discard, setDiscard] = useState([]);
+
+  let [output, setOutput] = useState("");
+
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection("games")
+      .onSnapshot(snapshot => {
+        // const currentGame = Math.max(...snapshot.docs.map(doc => parseInt(doc.id)));
+        const currentGame = snapshot.docs.map(doc => doc.id).sort()[0];
+        setGameId(currentGame);
+      });
+  });
+
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection("games")
+      .doc(gameId)
+      .onSnapshot(doc => {
+        setGameData(doc.data());
+      });
+  });
+
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection("games")
+      .doc(gameId)
+      .collection("turns")
+      .onSnapshot(snapshot => {
+        setTurnCount(snapshot.docs.length);
+      });
+  });
+
+  const newGameOnClick = e => {
+    firebase
+      .firestore()
+      .collection("games")
+      .doc(Date.now().toString())
+      .set({})
+      .then(() => {
+        console.log("started a new game");
+      })
+      .catch(() => {
+        console.error("error starting a new game");
+      });
+  };
+
+  const endTurnOnClick = e => {
+    firebase
+      .firestore()
+      .collection("games")
+      .doc(gameId)
+      .collection("turns")
+      .add({ ok: "cool" });
+  };
+
+  return (
+    <div className="card-area">
+      <div className="new-game-button" onClick={newGameOnClick}>
+        new game (current: {gameId})
+      </div>
+      <div className="test-end-turn-button" onClick={endTurnOnClick}>
+        end turn ({turnCount})
+      </div>
+      <div className="output">{output}</div>
+      <div
+        className="deck"
+        onClick={e => {
+          const card = deck.draw();
+          setHand([...hand, card]);
+          setOutput("you drew " + card.toString());
+        }}
+      >
+        <div className="draw-button">Draw</div>
+      </div>
+      <div
+        className="discard"
+        onClick={e => {
+          console.log("discard");
+          console.log(discard.shift().toString());
+        }}
+      >
+        &nbsp;
+      </div>
+      <div className="table-area">
+        <div className="table-card"> some card</div>
+        <div className="table-card"> some card</div>
+        <div className="table-card"> some card</div>
+        <div className="table-card"> some card</div>
+        <div className="table-card"> some card</div>
+      </div>
+      <div
+        className="hand-area"
+        onMouseDown={e => {
+          console.log(e.target);
+        }}
+      >
+        {hand.map((card, i) => {
+          return card.render(
+            {
+              onClick: e => {
+                const index = selected.indexOf(i);
+                if (index === -1) {
+                  setSelected([...selected, i]);
+                } else {
+                  const newSelected = [...selected];
+                  newSelected.splice(index, 1);
+                  setSelected(newSelected);
+                }
+              }
+            },
+            { isSelected: selected.includes(i) }
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+export default CardArea;
