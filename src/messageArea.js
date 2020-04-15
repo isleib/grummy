@@ -91,40 +91,38 @@ const MessageArea = props => {
   };
 
   return (
-    <div className="App">
-      <div className={`message-area${extended ? " extended" : ""}`}>
-        <div
-          className="message-area-button"
-          onClick={e => {
-            setExtended(!extended);
+    <div className={`message-area${extended ? " extended" : ""}`}>
+      <div
+        className="message-area-button"
+        onClick={e => {
+          setExtended(!extended);
+        }}
+      >
+        {extended ? "> >" : "< <"}
+      </div>
+      <div className="message-output">
+        {messages.map(m => (
+          <div className="message">{`${m.user}: ${m.message}`}</div>
+        ))}
+      </div>
+      <div className="username-input">
+        <input
+          type="text"
+          value={username}
+          onChange={e => {
+            setUsername(e.target.value);
           }}
-        >
-          {extended ? "> >" : "< <"}
-        </div>
-        <div className="message-output">
-          {messages.map(m => (
-            <div className="message">{`${m.user}: ${m.message}`}</div>
-          ))}
-        </div>
-        <div className="username-input">
-          <input
-            type="text"
-            value={username}
-            onChange={e => {
-              setUsername(e.target.value);
-            }}
-          />
-        </div>
-        <div className="message-input">
-          <textarea
-            type="textarea"
-            value={localMessage}
-            onKeyPress={catchKey}
-            onChange={e => {
-              setLocalMessage(e.target.value);
-            }}
-          />
-        </div>
+        />
+      </div>
+      <div className="message-input">
+        <textarea
+          type="textarea"
+          value={localMessage}
+          onKeyPress={catchKey}
+          onChange={e => {
+            setLocalMessage(e.target.value);
+          }}
+        />
       </div>
     </div>
   );

@@ -39,9 +39,9 @@ body {
       #bad0ef 20px
     );
     cursor: pointer;
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
+    -webkit-user-select: none; /* Chrome all / Safari all */
+    -moz-user-select: none; /* Firefox all */
+    -ms-user-select: none; /* IE 10+ */
     user-select: none;
   }
 
@@ -64,14 +64,25 @@ body {
 }
 
 @keyframes slide_chat_out {
-  from {right: -230px;}
-  to {right: 0;}
+  from {
+    height: 30px;
+    width: 30px;
+  }
+  to {
+    height: unset;
+    width: 260px;
+  }
 }
 @keyframes slide_chat_in {
-  from {right: 0;}
-  to {right: -230px;}
+  from {
+    height: unset;
+    width: 260px;
+  }
+  to {
+    height: 30px;
+    width: 30px;
+  }
 }
-
 
 .message-area {
   animation-name: slide_chat_in;
@@ -79,12 +90,15 @@ body {
   border: 1px solid #999;
   display: inline-block;
   font-size: 12px;
+  overflow: hidden;
   position: absolute;
-  right: -230px;
-  width: 260px;
+  right: 0;
+  height: 30px;
+  width: 30px;
 
   .message-area-button {
     border: 1px solid grey;
+    cursor: pointer;
     line-height: 24px;
     margin: 3px;
     text-align: center;
@@ -94,10 +108,10 @@ body {
 
   .message-input {
     height: 100px;
-    width: 600px;
+    width: 260px;
     textarea {
       height: 100px;
-      width: 600px;
+      width: 250px;
     }
   }
 }
@@ -105,5 +119,7 @@ body {
 .message-area.extended {
   animation-name: slide_chat_out;
   animation-duration: 0.5s;
-  right: 0;
+  max-height: 1334px;
+  height: unset;
+  width: 260px;
 }

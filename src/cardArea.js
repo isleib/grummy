@@ -23,10 +23,13 @@ const CardArea = props => {
       .collection("games")
       .onSnapshot(snapshot => {
         // const currentGame = Math.max(...snapshot.docs.map(doc => parseInt(doc.id)));
-        const currentGame = snapshot.docs.map(doc => doc.id).sort()[0];
+        const currentGame = snapshot.docs
+          .map(doc => doc.id)
+          .sort()
+          .reverse()[0];
         setGameId(currentGame);
       });
-  });
+  }, [gameId]);
 
   useEffect(() => {
     firebase
@@ -36,7 +39,7 @@ const CardArea = props => {
       .onSnapshot(doc => {
         setGameData(doc.data());
       });
-  });
+  }, [gameId]);
 
   useEffect(() => {
     firebase
@@ -47,7 +50,7 @@ const CardArea = props => {
       .onSnapshot(snapshot => {
         setTurnCount(snapshot.docs.length);
       });
-  });
+  }, [gameId]);
 
   const newGameOnClick = e => {
     firebase
@@ -81,6 +84,7 @@ const CardArea = props => {
         end turn ({turnCount})
       </div>
       <div className="output">{output}</div>
+
       <div
         className="deck"
         onClick={e => {
