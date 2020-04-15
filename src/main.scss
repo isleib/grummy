@@ -15,7 +15,10 @@ body {
 }
 
 .card-area {
-  margin: 69px;
+  display: inline-block;
+  margin: 10px;
+  max-width: 900px;
+  position: absolute;
 
   .card-stack {
     display: inline-block;
@@ -36,6 +39,10 @@ body {
       #bad0ef 20px
     );
     cursor: pointer;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;
   }
 
   .discard {
@@ -56,8 +63,34 @@ body {
   }
 }
 
+@keyframes slide_chat_out {
+  from {right: -230px;}
+  to {right: 0;}
+}
+@keyframes slide_chat_in {
+  from {right: 0;}
+  to {right: -230px;}
+}
+
+
 .message-area {
-  margin: 69px;
+  animation-name: slide_chat_in;
+  animation-duration: 0.5s;
+  border: 1px solid #999;
+  display: inline-block;
+  font-size: 12px;
+  position: absolute;
+  right: -230px;
+  width: 260px;
+
+  .message-area-button {
+    border: 1px solid grey;
+    line-height: 24px;
+    margin: 3px;
+    text-align: center;
+    height: 24px;
+    width: 24px;
+  }
 
   .message-input {
     height: 100px;
@@ -67,4 +100,10 @@ body {
       width: 600px;
     }
   }
+}
+
+.message-area.extended {
+  animation-name: slide_chat_out;
+  animation-duration: 0.5s;
+  right: 0;
 }

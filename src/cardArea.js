@@ -100,13 +100,6 @@ const CardArea = props => {
       >
         &nbsp;
       </div>
-      <div className="table-area">
-        <div className="table-card"> some card</div>
-        <div className="table-card"> some card</div>
-        <div className="table-card"> some card</div>
-        <div className="table-card"> some card</div>
-        <div className="table-card"> some card</div>
-      </div>
       <div
         className="hand-area"
         onMouseDown={e => {

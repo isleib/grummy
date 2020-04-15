@@ -9,7 +9,7 @@ import "./main.scss";
 function App() {
   return (
     <div className="App">
-      { false && <CardArea /> }
+      <CardArea />
       <MessageArea />
     </div>
   );

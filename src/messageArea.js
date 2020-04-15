@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import firebase, { messaging } from "./firebase";
+import "@firebase/messaging";
+import firebase from "./firebase";
 
 function createUUID() {
   return `${Date.now()}-xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx`.replace(
@@ -12,25 +13,29 @@ function createUUID() {
   );
 }
 
-messaging
-  .requestPermission()
-  .then(() => {
-    console.log("ok. cool");
-    return messaging.getToken();
-  })
-  .then(token => {
-    console.log({ token });
-  })
-  .catch(err => {
-    console.log("no permission");
-  });
+if (firebase.messaging.isSupported()) {
+  const messaging = firebase.messaging();
+  messaging
+    .requestPermission()
+    .then(() => {
+      console.log("ok. cool");
+      return messaging.getToken();
+    })
+    .then(token => {
+      console.log({ token });
+    })
+    .catch(err => {
+      console.log("no permission");
+    });
 
-messaging.onMessage(payload => {
-  console.log({payload});
-});
+  messaging.onMessage(payload => {
+    console.log({ payload });
+  });
+}
 
 const MessageArea = props => {
   let [username, setUsername] = useState("new user");
+  let [extended, setExtended] = useState(false);
   let [localMessage, setLocalMessage] = useState("");
   let [messages, setMessages] = useState([]);
 
@@ -87,7 +92,15 @@ const MessageArea = props => {
 
   return (
     <div className="App">
-      <div className="message-area">
+      <div className={`message-area${extended ? " extended" : ""}`}>
+        <div
+          className="message-area-button"
+          onClick={e => {
+            setExtended(!extended);
+          }}
+        >
+          {extended ? "> >" : "< <"}
+        </div>
         <div className="message-output">
           {messages.map(m => (
             <div className="message">{`${m.user}: ${m.message}`}</div>
