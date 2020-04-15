@@ -31,9 +31,10 @@ export class Card {
   render(attrs, options) {
     const xOffset = -38 * (this.value - 1) - this.value - this.value / 8;
     const yOffset = -52 * this.suit;
+    const {isSelected} = options || false;
     return (
       <div
-        className={`hand-card ${options.isSelected ? "selected" : ""}`}
+        className={`hand-card ${isSelected ? "selected" : ""}`}
         style={{
           backgroundImage: `url('${cardsImage}')`,
           backgroundPositionX: `${xOffset}px`,

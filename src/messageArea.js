@@ -102,7 +102,7 @@ const MessageArea = props => {
       </div>
       <div className="message-output">
         {messages.map(m => (
-          <div className="message">{`${m.user}: ${m.message}`}</div>
+          <div className="message" >{`${m.user}: ${m.message}`}</div>
         ))}
       </div>
       <div className="username-input">

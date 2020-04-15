@@ -13,6 +13,7 @@ const CardArea = props => {
 
   let [hand, setHand] = useState([]);
   let [selected, setSelected] = useState([]);
+  let [played, setPlayed] = useState([]);
   let [discard, setDiscard] = useState([]);
 
   let [output, setOutput] = useState("");
@@ -85,6 +86,32 @@ const CardArea = props => {
       </div>
       <div className="output">{output}</div>
 
+      <div className="player-area">
+        <div
+          className="opp opp-left"
+          style={{ border: "1px dotted darkred" }}
+          onClick={e => {
+            console.log("expand");
+          }}
+        >
+          {hand.map(card => {
+            return card.render();
+          })}
+        </div>
+        <div
+          className="opp opp-center"
+          style={{ border: "1px dotted darkgreen" }}
+        >
+          cards
+        </div>
+        <div
+          className="opp opp-right"
+          style={{ border: "1px dotted darkblue" }}
+        >
+          cards
+        </div>
+      </div>
+
       <div
         className="deck"
         onClick={e => {
@@ -100,10 +127,33 @@ const CardArea = props => {
         onClick={e => {
           console.log("discard");
           console.log(discard.shift().toString());
+
         }}
       >
         &nbsp;
       </div>
+
+      <div className="player-area">
+        <div
+          className="player"
+          onClick={e => {
+            console.log('clicked', selected);
+            if (selected.length > 0) {
+              let newPlayed = [...played, ...selected.map(i => (hand[i]))];
+              let newHand = hand.filter((card, i) => !selected.includes(i));
+
+              setPlayed(newPlayed);
+              setHand(newHand);
+              setSelected([]);
+            }
+          }}
+        >
+          {played.map(card => {
+            return card.render();
+          })}
+        </div>
+      </div>
+
       <div
         className="hand-area"
         onMouseDown={e => {
