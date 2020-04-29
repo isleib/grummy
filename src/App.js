@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import CardArea from "./cardArea";
 import MessageArea from "./messageArea";
-import firebase from "./firebase";
+
+import Lobby from "./lobby";
 
 import "./main.scss";
 
 function App() {
   return (
     <div className="App">
-      <CardArea />
-      <MessageArea />
+      <Lobby />
     </div>
   );
 }

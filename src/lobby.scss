@@ -1,0 +1,17 @@
+.lobby {
+  margin: 20px;
+
+  .player-area {
+    border: 1px solid black;
+    padding: 10px 15px;
+    width: fit-content;
+
+    .user-list {
+      font-size: 12px;
+    }
+  }
+
+  .lobby-message-area {
+    min-width: 300px;
+  }
+}

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import firebase from "./firebase";
 import { Card, Deck } from "./cards";
+import axios from "axios";
 
-const deck = new Deck();
-deck.shuffle();
+const api = "http://localhost:6969";
 
 const CardArea = props => {
   let [gameId, setGameId] = useState("0");
@@ -37,16 +37,6 @@ const CardArea = props => {
       .firestore()
       .collection("games")
       .doc(gameId)
-      .onSnapshot(doc => {
-        setGameData(doc.data());
-      });
-  }, [gameId]);
-
-  useEffect(() => {
-    firebase
-      .firestore()
-      .collection("games")
-      .doc(gameId)
       .collection("turns")
       .onSnapshot(snapshot => {
         setTurnCount(snapshot.docs.length);
@@ -54,17 +44,9 @@ const CardArea = props => {
   }, [gameId]);
 
   const newGameOnClick = e => {
-    firebase
-      .firestore()
-      .collection("games")
-      .doc(Date.now().toString())
-      .set({})
-      .then(() => {
-        console.log("started a new game");
-      })
-      .catch(() => {
-        console.error("error starting a new game");
-      });
+    axios.get(`${api}/new`).then(res => {
+      console.log("cool", res);
+    });
   };
 
   const endTurnOnClick = e => {
@@ -115,9 +97,11 @@ const CardArea = props => {
       <div
         className="deck"
         onClick={e => {
-          const card = deck.draw();
-          setHand([...hand, card]);
-          setOutput("you drew " + card.toString());
+          axios.get(`${api}/draw`).then(res => {
+            const card = new Card(res.data.card);
+            setHand([...hand, card]);
+            setOutput("you drew " + card.toString());
+          });
         }}
       >
         <div className="draw-button">Draw</div>
@@ -127,7 +111,6 @@ const CardArea = props => {
         onClick={e => {
           console.log("discard");
           console.log(discard.shift().toString());
-
         }}
       >
         &nbsp;
@@ -137,9 +120,9 @@ const CardArea = props => {
         <div
           className="player"
           onClick={e => {
-            console.log('clicked', selected);
+            console.log("clicked", selected);
             if (selected.length > 0) {
-              let newPlayed = [...played, ...selected.map(i => (hand[i]))];
+              let newPlayed = [...played, ...selected.map(i => hand[i])];
               let newHand = hand.filter((card, i) => !selected.includes(i));
 
               setPlayed(newPlayed);
