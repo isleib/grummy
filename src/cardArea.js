@@ -45,8 +45,6 @@ const CardArea = props => {
 
   const newGameOnClick = e => {
     axios.get(`${api}/new`).then(res => {
-      window.localStorage.setItem("UUID", res.UUID);
-      window.localStorage.setItem("turn", 1);
       console.log("cool", res);
     });
   };

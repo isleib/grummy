@@ -27,8 +27,8 @@ const Lobby = props => {
   let gameId = useGameObject();
 
   useEffect(() => {
-    // const auth = firebase.auth();
-    // auth.signInAnonymously();
+    const auth = firebase.auth();
+    auth.signInAnonymously();
     console.log('runnging setTimeout');
   });
 
